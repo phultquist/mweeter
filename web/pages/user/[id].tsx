@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import Head from 'next/head'
 import Image from 'next/image'
 import { useDocument } from "react-firebase9-hooks/firestore";
-import "../../firebase/clientApp";
+import "../../util/clientApp";
 import { doc, getFirestore, updateDoc } from '@firebase/firestore';
 import { Layout } from '../../components';
 import { ReactElement } from 'react';
-import { NextPageWithLayout } from '../types';
+import { NextPageWithLayout } from '../../util/types';
 
 
 const UserPage: NextPageWithLayout = () => {

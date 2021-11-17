@@ -4,7 +4,7 @@ import { getFirestore, collection, addDoc, query, where, DocumentData, documentI
 import { useCollection } from "react-firebase9-hooks/firestore"
 import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts';
 
-import { auth, app, firestore } from "../firebase/clientApp";
+import { auth, app, firestore } from "../util/clientApp";
 import { ReactElement, useState } from 'react';
 
 const humanizer = new HumanizeDuration(new HumanizeDurationLanguage());

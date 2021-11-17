@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { auth } from "../firebase/clientApp";
+import { auth } from "../util/clientApp";
 
 export default function Logout() {
     useEffect(() => {

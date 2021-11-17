@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { doc, getFirestore } from '@firebase/firestore';
 
 import '../styles/globals.css'
-import { AppPropsWithLayout } from './types'
-import { auth } from "../firebase/clientApp";
+import { AppPropsWithLayout } from '../util/types'
+import { auth } from "../util/clientApp";
 import { ProfilePage } from '../components';
 
 

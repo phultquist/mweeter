@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useAuthState } from "react-firebase9-hooks/auth";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { auth } from "../firebase/clientApp";
+import { auth } from "../util/clientApp";
 
 const uiConfig = {
   signInFlow: 'popup',

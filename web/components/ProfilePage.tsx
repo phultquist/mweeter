@@ -5,7 +5,7 @@ import type { NextPage } from 'next'
 
 import { useState } from 'react';
 import { useDocument } from 'react-firebase9-hooks/firestore';
-import { auth } from "../firebase/clientApp";
+import { auth } from "../util/clientApp";
 
 const ProfilePage: NextPage<{ user: User, userRef?: DocumentReference }> = props => {
     const uid = props.user.uid;
