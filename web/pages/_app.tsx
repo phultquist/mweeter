@@ -6,7 +6,7 @@ import { doc, getFirestore } from '@firebase/firestore';
 import '../styles/globals.css'
 import { AppPropsWithLayout } from '../util/types'
 import { auth } from "../util/clientApp";
-import { ProfilePage } from '../components';
+import { LoadingScreen, ProfilePage } from '../components';
 
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   });
 
   if (loading || userLoading) {
-    return <div>loading</div>
+    return <LoadingScreen />
   }
 
   console.log(router.pathname, user?.uid);
@@ -28,8 +28,8 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (!user) {
       typeof window !== 'undefined' && router.push('/signin');
       return <div>Redirecting...</div>
-    } else if (!userDoc?.exists()) {
-      return <ProfilePage user={user} userRef={userRef} />
+    } else if (!userDoc?.exists() || !userDoc.data().photoURL) {
+      return <ProfilePage user={user} userRef={userRef} mustFinish />
     } else if (error || userError) {
       console.log(error, userError);
 

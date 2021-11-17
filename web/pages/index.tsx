@@ -11,7 +11,7 @@ export function Home(props: { user: User, userData: DocumentData }) {
 
 
 Home.getLayout = (page: ReactElement) => {
-  return <Layout>{page}</Layout>;
+  return <Layout highlight=''>{page}</Layout>;
 }
 
 

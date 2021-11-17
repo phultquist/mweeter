@@ -40,29 +40,30 @@ const UserPage: NextPageWithLayout = () => {
     const user = userDoc.data();
 
     return (
-        <div>
-            {user.first} {user.last} <br />
+        <div className='p-10'>
+            <h1>{user.first} {user.last}</h1>
             @{user.handle} is following:
-            {!(user.following?.length) ? <p className="text-gray-500 text-sm">No Following</p> : user.following?.map((following: string) => {
-                (
-                    <div key={following}>
-                        {following}
-                        <button onClick={() => {
-                            updateDoc(userRef, {
-                                following: user.following.filter((f: string) => f !== following),
-                            });
-                        }}>Unfollow</button>
-                    </div>
-                )
-            }
-            )}
+            {!(user.following?.length) ? <p className="text-gray-500 text-sm">No followers. Visit <a href="/" className="underline">home</a> to follow others</p>
+                : user.following?.map((following: string) => {
+                    return (
+                        <div key={following}>
+                            {following}
+                            <button onClick={() => {
+                                updateDoc(userRef, {
+                                    following: user.following.filter((f: string) => f !== following),
+                                });
+                            }}>Unfollow</button>
+                        </div>
+                    )
+                }
+                )}
         </div>
     )
 }
 
 
 UserPage.getLayout = (page: ReactElement) => {
-    return <Layout>{page}</Layout>;
+    return <Layout highlight='profile'>{page}</Layout>;
 }
 
 export default UserPage;

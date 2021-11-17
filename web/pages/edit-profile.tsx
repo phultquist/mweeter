@@ -10,7 +10,7 @@ export function Profile(props: { user: User, userRef?: DocumentReference }) {
 }
 
 Profile.getLayout = (page: ReactElement) => {
-    return <Layout>{page}</Layout>;
+    return <Layout highlight='edit-profile'>{page}</Layout>;
   }
 
 export default Profile;

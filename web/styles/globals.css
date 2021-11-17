@@ -15,6 +15,14 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  @apply text-2xl font-bold my-4
+}
+
+h2 {
+  @apply text-xl font-bold my-4
+}
+
 * {
   box-sizing: border-box;
 }
