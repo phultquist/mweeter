@@ -43,7 +43,7 @@ const UserPage: NextPageWithLayout = () => {
         <div>
             {user.first} {user.last} <br />
             @{user.handle} is following:
-            {user.following.map((following: string) => {
+            {!(user.following?.length) ? <p className="text-gray-500 text-sm">No Following</p> : user.following?.map((following: string) => {
                 (
                     <div key={following}>
                         {following}

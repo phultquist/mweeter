@@ -20,10 +20,6 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   if (loading || userLoading) {
     return <div>loading</div>
-  } else if (error || userError) {
-    console.log(error, userError);
-    
-    return <div>error</div>
   }
 
   console.log(router.pathname, user?.uid);
@@ -34,7 +30,14 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       return <div>Redirecting...</div>
     } else if (!userDoc?.exists()) {
       return <ProfilePage user={user} userRef={userRef} />
+    } else if (error || userError) {
+      console.log(error, userError);
+
+      return <div>error</div>
     }
+  } else if (user) {
+    typeof window !== 'undefined' && router.push('/');
+    return <div>Redirecting...</div>
   }
 
   const userData = userDoc?.data();

@@ -28,10 +28,9 @@ function HomePage(props: { user: User, userData: DocumentData }) {
         <div>
             <div>
                 <h1>{props.userData.first} {props.userData.last} @{props.userData.handle}</h1>
-                <a href={"/user/" + user.uid}>View Profile</a> <br /><br />
             </div>
             <div>
-                <textarea value={mweet} onChange={(e) => setMweet(e.target.value)} name="" /> <br />
+                <textarea value={mweet} onChange={(e) => setMweet(e.target.value)} name="" className="border border-gray-100 rounded-lg" /> <br />
                 <button onClick={async () => {
                     if (mweet.length > 280 || mweet.length < 1) {
                         alert("Invalid mweet: " + mweet.length);
