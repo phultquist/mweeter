@@ -26,14 +26,15 @@ try {
  * @param res 
  */
 export default async function updateProfile(req: NextApiRequest, res: NextApiResponse) {
-  const { handle, first, last } = req.body;
+  let { handle, first, last, photoURL } = req.body;
+  handle = handle.trim().toLowerCase();
   const authorization = req.headers.authorization?.split("Bearer ")[1];
   let auth = getAuth(app);
 
   if (!authorization) {
     res.status(401).json({ error: "No authorization token provided" });
     return;
-  } else if (!handle || !first || !last) {
+  } else if (!handle || !first || !last || !photoURL) {
     res.status(400).json({ error: "Missing required fields" });
     return;
   }
@@ -51,16 +52,29 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
 
     const usersCollection = db.collection("users");
     const userHandleSnapshot = await usersCollection.where("handle", "==", handle).get();
+    let handleTaken = false;
 
-    if (!userHandleSnapshot.empty) {
-      res.status(400).json({ error: "Handle already exists" });
+    userHandleSnapshot.docs.forEach(doc => {
+      console.log(doc.data(), doc.id);
+
+      if (doc.id !== uid) {
+        handleTaken = true;
+      }
+    });
+
+    if (handleTaken) {
+      res.status(400).json({ error: "Handle already in use" });
       return;
     }
+    console.log({ handle, first, last, photoURL });
 
-    await db.doc(`users/${uid}`).update({
+    await db.doc(`users/${uid}`).set({
       handle,
       first,
       last,
+      photoURL
+    }, {
+      merge: true,
     });
 
     res.status(200).json({
