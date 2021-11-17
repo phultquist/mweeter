@@ -21,6 +21,8 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   if (loading || userLoading) {
     return <div>loading</div>
   } else if (error || userError) {
+    console.log(error, userError);
+    
     return <div>error</div>
   }
 
