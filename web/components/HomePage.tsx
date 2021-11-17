@@ -2,14 +2,14 @@ import { User } from '@firebase/auth';
 import type { NextPage } from 'next'
 import { getFirestore, collection, addDoc, query, where, DocumentData, documentId, limit, orderBy, doc, updateDoc } from '@firebase/firestore';
 import { useCollection } from "react-firebase9-hooks/firestore"
-
-import Head from 'next/head';
-import Image from 'next/image';
+import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts';
 
 import { auth, app, firestore } from "../firebase/clientApp";
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 
-const HomePage: NextPage<{ user: User, userData: DocumentData }> = props => {
+const humanizer = new HumanizeDuration(new HumanizeDurationLanguage());
+
+function HomePage(props: { user: User, userData: DocumentData }) {
     const { user } = props;
     const [mweet, setMweet] = useState('');
     const db = getFirestore();
@@ -17,7 +17,7 @@ const HomePage: NextPage<{ user: User, userData: DocumentData }> = props => {
     const userCollection = collection(db, "users");
 
     const following = [user.uid, ...props.userData.following || []];
-    console.log(following);
+
     const notFollowingQuery = query(userCollection, where(documentId(), "not-in", following), limit(5));
     const mweetsQuery = query(mweetCollection, where("user", "in", [user.uid, ...props.userData.following || []]));
 
@@ -26,8 +26,10 @@ const HomePage: NextPage<{ user: User, userData: DocumentData }> = props => {
 
     return (
         <div>
-
-            <h1>{props.userData.first} {props.userData.last} @{props.userData.handle}</h1>
+            <div>
+                <h1>{props.userData.first} {props.userData.last} @{props.userData.handle}</h1>
+                <a href={"/user/" + user.uid}>View Profile</a> <br /><br />
+            </div>
             <div>
                 <textarea value={mweet} onChange={(e) => setMweet(e.target.value)} name="" /> <br />
                 <button onClick={async () => {
@@ -50,24 +52,25 @@ const HomePage: NextPage<{ user: User, userData: DocumentData }> = props => {
                 {
                     mweets?.docs.map(mweetDoc => {
                         const data = mweetDoc.data();
-                        const date = data.date.toDate();
+                        const date: Date = data.date.toDate();
                         return {
                             text: data.text,
                             id: mweetDoc.id,
                             date,
                             user: data.user,
                         }
-                    }).sort((a, b) => b.date - a.date).map(mweetDoc => {
+                    }).sort((a, b) => b.date.getTime() - a.date.getTime()).map(mweetDoc => {
+                        let dateString = mweetDoc.date.toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' });
+
+                        // if date is less than 24 hours old, display it as a duration
+                        if (new Date().getTime() - mweetDoc.date.getTime() < 24 * 60 * 60 * 1000) {
+                            dateString = humanizer.humanize(new Date().getTime() - mweetDoc.date.getTime(), { units: ["h"], round: true }) + ' ago';
+                        }
+
                         return (
-                            <div key={mweetDoc.id}>
-                                <section style={{
-                                    border: "1px solid black",
-                                    borderRadius: "5px",
-                                    margin: "10px 10px",
-                                }}>
-                                    <p>{mweetDoc.date.toString()}</p>
-                                    <p>{mweetDoc.text}</p>
-                                </section>
+                            <div key={mweetDoc.id} className="bg-white my-4">
+                                <p className="text-xs text-gray-500">{dateString}</p>
+                                <p>{mweetDoc.text}</p>
                             </div>
                         )
                     })}
@@ -89,9 +92,8 @@ const HomePage: NextPage<{ user: User, userData: DocumentData }> = props => {
                     </div>
                 })
             }
-            <button onClick={() => auth.signOut()}>Log Out</button>
         </div >
     )
 }
 
-export default HomePage
+export default HomePage;

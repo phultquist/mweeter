@@ -4,12 +4,14 @@ import { useRouter } from 'next/router';
 import Head from 'next/head'
 import Image from 'next/image'
 import { useDocument } from "react-firebase9-hooks/firestore";
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import "../../firebase/clientApp";
 import { doc, getFirestore, updateDoc } from '@firebase/firestore';
+import { Layout } from '../../components';
+import { ReactElement } from 'react';
+import { NextPageWithLayout } from '../types';
 
 
-const UserPage: NextPage = () => {
+const UserPage: NextPageWithLayout = () => {
     const router = useRouter();
     let { id } = router.query;
     let idString = id as string;
@@ -21,8 +23,6 @@ const UserPage: NextPage = () => {
     }
 
     // const [user, loading, error] = useAuthState(auth);
-
-    console.log(id);
 
     const userRef = doc(getFirestore(), "users", idString);
     const [userDoc, userLoading, userError] = useDocument(userRef, {
@@ -58,6 +58,11 @@ const UserPage: NextPage = () => {
             )}
         </div>
     )
+}
+
+
+UserPage.getLayout = (page: ReactElement) => {
+    return <Layout>{page}</Layout>;
 }
 
 export default UserPage;

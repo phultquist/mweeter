@@ -1,39 +1,18 @@
-import { GoogleAuthProvider, OAuthProvider } from '@firebase/auth';
-import { doc, getFirestore } from '@firebase/firestore';
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import { useAuthState } from "react-firebase9-hooks/auth";
-import { useDocument } from 'react-firebase9-hooks/firestore';
-import { HomePage, SignInPage, ProfilePage } from '../components';
-import { auth, app, firestore } from "../firebase/clientApp";
+import { User } from '@firebase/auth';
+import { DocumentData } from '@firebase/firestore';
+import { ReactElement } from 'react';
+import { HomePage, Layout } from '../components';
 
-const Home: NextPage = () => {
-  const [user, loading, error] = useAuthState(auth);
-
-  const userRef = doc(getFirestore(), "users", user?.uid || "null");
-  const [userDoc, userLoading, userError] = useDocument(userRef, {
-    snapshotListenOptions: { includeMetadataChanges: true }
-  });
-
-  if (!user) {
-    return <SignInPage />;
-  } else if (loading || userLoading) {
-    return <div>loading</div>
-  } else if (error || userError) {
-    return <div>error</div>
-  } else if (!userDoc?.exists()) {    
-    return <ProfilePage user={user} userRef={userRef} />
-  }
-
+export function Home(props: { user: User, userData: DocumentData }) {
   return (
-    <div>
-      {user ?
-        <HomePage user={user} userData={userDoc.data()} /> :
-        <SignInPage />
-      }
-    </div>
+    <HomePage user={props.user} userData={props.userData} />
   )
 }
+
+
+Home.getLayout = (page: ReactElement) => {
+  return <Layout>{page}</Layout>;
+}
+
 
 export default Home;

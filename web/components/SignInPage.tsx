@@ -16,15 +16,11 @@ const uiConfig = {
 
 const SignInPage: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
-  console.log(user);
 
   return (
-    <div>
+    <div id="firebaseui-auth-container">
       {JSON.stringify(user)}
-      {user ?
-        "Signed in already" :
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-      }
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
     </div>
   )
 }
