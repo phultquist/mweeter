@@ -33,6 +33,9 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
 
   let { handle, first, last, photoURL } = req.body;
   handle = handle.trim().toLowerCase();
+  if (photoURL === null) {
+    photoURL = 'https://i.ibb.co/GxSptzK/defualt-pfp.jpg';
+  }
   const authorization = req.headers.authorization?.split("Bearer ")[1];
   let auth = getAuth(app);
 
@@ -40,6 +43,8 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
     res.status(401).json({ error: "No authorization token provided" });
     return;
   } else if (!handle || !first || !last || !photoURL) {
+    console.log(handle, first, last, photoURL);
+    
     res.status(400).json({ error: "Missing required fields" });
     return;
   }
