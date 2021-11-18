@@ -6,7 +6,7 @@ import { doc, getFirestore } from '@firebase/firestore';
 import '../styles/globals.css'
 import { AppPropsWithLayout } from '../util/types'
 import { auth } from "../util/clientApp";
-import { LoadingScreen, ProfilePage } from '../components';
+import { ErrorScreen, LoadingScreen, ProfilePage } from '../components';
 
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -33,7 +33,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     } else if (error || userError) {
       console.log(error, userError);
 
-      return <div>error</div>
+      return <ErrorScreen text={error?.message + '\n' + userError?.message}/>
     }
   } else if (user) {
     typeof window !== 'undefined' && router.push('/');

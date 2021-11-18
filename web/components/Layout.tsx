@@ -1,32 +1,33 @@
 import { User } from '@firebase/auth'
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
+import { BsEmojiHeartEyes, BsBoxArrowRight, BsHandThumbsUp, BsHouse } from 'react-icons/bs'
 
 type pages = '' | 'home' | 'edit-profile' | 'profile' | 'logout' | 'signin'
 
 export default function Layout(props: { children: ReactNode, highlight?: pages }) {
     if (props.highlight === 'home') props.highlight = '';
 
-    const items: { name: string, id: pages, icon: string }[] = [
+    const items: { name: string, id: pages, icon: JSX.Element }[] = [
         {
             name: 'Home',
             id: '',
-            icon: ''
+            icon: <BsHouse strokeWidth={0.6} />
         },
         {
             name: 'Following',
             id: 'profile',
-            icon: ''
+            icon: <BsHandThumbsUp strokeWidth={0.6} />
         },
         {
             name: 'Your Profile',
             id: 'edit-profile',
-            icon: ''
+            icon: <BsEmojiHeartEyes strokeWidth={0.6} />
         },
         {
             name: 'Logout',
             id: 'logout',
-            icon: ''
+            icon: <BsBoxArrowRight strokeWidth={0.6} />
         }
     ];
     return (
@@ -38,9 +39,14 @@ export default function Layout(props: { children: ReactNode, highlight?: pages }
                         {items.map((item, index) => {
                             return <li key={index}>
                                 <Link href={'/' + item.id}>
-                                    <a href={'/' + item.id}>
-                                        <p className={`text-gray-600 font-medium p-2 rounded-md ${props.highlight === item.id ? 'font-bold bg-gray-200' : ''}`}>{item.name}</p>
-                                    </a>
+                                    <div className={`flex flex-row justify-start w-full rounded-md ${props.highlight === item.id ? 'font-bold bg-gray-200' : ''}`}>
+                                        <div className="mx-2 my-auto text-gray-400">
+                                        {item.icon}
+                                        </div>
+                                        <a href={'/' + item.id}>
+                                            <p className={`text-gray-600 font-medium p-2`}>{item.name}</p>
+                                        </a>
+                                    </div>
                                 </Link>
                             </li>
                         })}

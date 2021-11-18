@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /mweets/{mweetId} {
+      // Only the authenticated users can read
+      // Only the admin can write, because we need to validate data from the backend
+      allow read: if request.auth != null;
+    }
+    match /users/{userId} {
+      // Only the firebase-admin can write handle to this collection
+      allow write: if (
+        request.auth != null && 
+        request.auth.uid == userId &&
+        !(resource.data.handle != request.resource.data.handle)
+      );
+      allow read: if request.auth != null;
+    }
+    match /private/{userId} {
+      allow write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null;
+    }
+  }
+}

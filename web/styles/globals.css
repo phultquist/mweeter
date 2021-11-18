@@ -23,6 +23,10 @@ h2 {
   @apply text-xl font-bold my-4
 }
 
+h3 {
+  @apply text-lg font-medium my-4
+}
+
 * {
   box-sizing: border-box;
 }

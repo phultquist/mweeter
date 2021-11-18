@@ -43,12 +43,12 @@ const ProfilePage: NextPage<{ user: User, userRef?: DocumentReference, mustFinis
     }, [message])
 
     return (
-        <div className="p-10">
+        <div className="p-16">
             {props.mustFinish && "Finish your profile to continue using Mweeter"}
             <h1>Profile</h1>
             <div className={`space-y-4 transition-all ${loading ? 'opacity-60' : 'opacity-100'}`}>
 
-                <div className="flex flex-row space-x-6">
+                <div className="flex flex-row space-x-6 max-w-xl">
                     <TextInput
                         label="First Name"
                         value={first}
@@ -60,19 +60,23 @@ const ProfilePage: NextPage<{ user: User, userRef?: DocumentReference, mustFinis
                         onChange={(value) => setLast(value)}
                     />
                 </div>
-                <TextInput
-                    label="Handle"
-                    value={handle}
-                    onChange={(value) => setHandle(value)}
-                />
-                <TextInput
-                    label="Email"
-                    value={props.user.email || 'No Email'}
-                    onChange={() => null}
-                    disabled
-                />
+                <div className="max-w-md">
+                    <TextInput
+                        label="Handle"
+                        value={handle}
+                        onChange={(value) => setHandle(value)}
+                    />
+                </div>
+                <div className="max-w-md">
+                    <TextInput
+                        label="Email"
+                        value={props.user.email || 'No Email'}
+                        onChange={() => null}
+                        disabled
+                    />
+                </div>
                 <Button
-                    text={props.mustFinish ? "Create Profile" : "Update Profile"}
+                    text={props.mustFinish ? "Create profile" : "Update info"}
                     onClick={async () => {
                         setLoading(true);
                         // the server needs to verify that the sender of the request is the user that they say they are

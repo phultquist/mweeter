@@ -26,6 +26,11 @@ try {
  * @param res 
  */
 export default async function updateProfile(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ message: 'Method not allowed' });
+    return;
+  }
+
   let { handle, first, last, photoURL } = req.body;
   handle = handle.trim().toLowerCase();
   const authorization = req.headers.authorization?.split("Bearer ")[1];
@@ -89,6 +94,6 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
   } catch (e) {
     console.log(e);
 
-    res.status(500).json({ error: "Unkown error updating profile" });
+    res.status(500).json({ error: `Unexpected error updating profile: ${e}` });
   }
 }
