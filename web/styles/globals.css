@@ -30,3 +30,9 @@ h3 {
 * {
   box-sizing: border-box;
 }
+
+.firebaseui-idp-button {
+  box-shadow: none !important;
+  border: 1px solid #bbb !important;
+  border-radius: 5px !important; 
+}

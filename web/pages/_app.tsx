@@ -23,27 +23,25 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }
 
   console.log(router.pathname, user?.uid);
+  const userData = userDoc?.data();
 
   if (!(router.pathname === '/signin')) {
     if (!user) {
       typeof window !== 'undefined' && router.push('/signin');
       return <div>Redirecting...</div>
-    } else if (!userDoc?.exists() || !userDoc.data().photoURL) {
+    } else if (!userDoc?.exists() || !userData || !userData.photoURL) {
       return <ProfilePage user={user} userRef={userRef} mustFinish />
     } else if (error || userError) {
-      console.log(error, userError);
-
-      return <ErrorScreen text={error?.message + '\n' + userError?.message}/>
+      return <ErrorScreen text={error?.message + '\n' + userError?.message} />
     }
   } else if (user) {
+    // if user is signed in, and is visiting /signin, redirect to home
     typeof window !== 'undefined' && router.push('/');
     return <div>Redirecting...</div>
   }
 
-  const userData = userDoc?.data();
-
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  return getLayout(<Component {...pageProps} user={user} userDoc={userDoc} userData={userData} userRef={userRef} />)
+  return getLayout(<Component {...pageProps} user={user} userDoc={userDoc} userData={userData} userRef={userRef} />, userData)
 }

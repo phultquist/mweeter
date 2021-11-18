@@ -31,7 +31,9 @@ export function UserPage(props: { user: User, userData: DocumentData }) {
     const userCollectionRef = collection(getFirestore(), 'users');
     console.log(userData?.following);
 
-    const followingQuery = query(userCollectionRef, where(documentId(), "in", userData ? userData.following : ['null']), limit(5));
+    console.log(userData?.following ? userData.following : ['null']);
+    
+    const followingQuery = query(userCollectionRef, where(documentId(), "in", userData?.following?.length ? userData.following : ['null']), limit(5));
     const [following, followingLoading, followingError] = useCollection(followingQuery, { snapshotListenOptions: { includeMetadataChanges: true } });
 
     if (userError || followingError) {
@@ -58,7 +60,7 @@ export function UserPage(props: { user: User, userData: DocumentData }) {
             }
             <div className="grid grid-cols-2 max-w-screen-md">
                 {
-                    !(following?.docs) ? <p className="text-gray-500 text-sm">No followers. Visit <Link href="/"><a href="/" className="underline">home</a></Link> to follow others</p>
+                    !(following?.docs.length) ? <p className="text-gray-500 text-sm">No followers. Visit <Link href="/"><a href="/" className="underline">home</a></Link> to follow others</p>
                         : following.docs.map((doc) => {
                             return <div className="mr-8 border-t border-gray-300 py-2"><UserPreview authUser={props.user} authUserData={props.userData} previewUserDoc={doc} /></div>
                         })
@@ -69,8 +71,8 @@ export function UserPage(props: { user: User, userData: DocumentData }) {
 }
 
 
-UserPage.getLayout = (page: ReactElement) => {
-    return <Layout highlight='profile'>{page}</Layout>;
+UserPage.getLayout = (page: ReactElement, userInfo?: DocumentData) => {
+    return <Layout highlight='profile' userInfo={userInfo}>{page}</Layout>;
 }
 
 export default UserPage;

@@ -1,10 +1,16 @@
-import { GoogleAuthProvider, OAuthProvider } from '@firebase/auth';
+import { getAuth, GoogleAuthProvider, OAuthProvider, signInWithPopup } from '@firebase/auth';
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useAuthState } from "react-firebase9-hooks/auth";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { auth } from "../util/clientApp";
+
+const provider = new OAuthProvider('microsoft.com');
+
+provider.setCustomParameters({
+  prompt: 'consent',
+  tenant: 'common'
+})
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -15,12 +21,30 @@ const uiConfig = {
 }
 
 const SignInPage: NextPage = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const auth = getAuth();
 
   return (
-    <div id="firebaseui-auth-container">
-      {JSON.stringify(user)}
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+    <div className="flex w-screen h-screen">
+      <div className="my-auto mx-auto pt-20">
+        <div className="w-12 h-12 relative mx-auto">
+          <Image src="/logo.svg" layout="fill" />
+        </div>
+        <h1 className="text-center -mt-1 mb-10">mweeter</h1>
+        <div className="flex flex-row space-x-2">
+          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+          <div className="relative my-auto cursor-pointer" onClick={() => {
+            signInWithPopup(auth, provider).then(function (result) {
+              console.log(result);
+            });
+
+          }}>
+            <div className='w-48 rounded-[5px] border border-[#bbb] relative h-10 overflow-hidden'>
+              <Image src="/ms-signin.svg" layout="fill" />
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   )
 }

@@ -31,7 +31,7 @@ function HomePage(props: { user: User, userData: DocumentData }) {
 
     const following = [user.uid, ...props.userData.following || []];
 
-    const notFollowingQuery = query(userCollection, where(documentId(), "not-in", following), limit(5));
+    const notFollowingQuery = query(userCollection, where(documentId(), "not-in", following || ['null']), limit(5));
     const mweetsQuery = query(mweetCollection, where("user", "in", [user.uid, ...props.userData.following || []]));
 
     const [mweets, loading, error] = useCollection(mweetsQuery, { snapshotListenOptions: { includeMetadataChanges: true } });
@@ -119,13 +119,13 @@ function HomePage(props: { user: User, userData: DocumentData }) {
                                 }
 
                                 setNewMweetLoading(true);
-                                
+
                                 const token = await auth.currentUser?.getIdToken(true);
-                                
+
                                 const newMweet = {
                                     text: mweet,
                                 }
-                                
+
                                 await fetch('/api/mweet', {
                                     method: 'POST',
                                     mode: 'cors',
@@ -135,7 +135,7 @@ function HomePage(props: { user: User, userData: DocumentData }) {
                                     },
                                     body: JSON.stringify(newMweet)
                                 })
-                                
+
                                 setNewMweetLoading(false);
                                 setMweet('');
                             }} />
@@ -162,7 +162,10 @@ function HomePage(props: { user: User, userData: DocumentData }) {
             </div>
             <div className="flex-grow pt-10 overflow-hidden w-1/3" >
                 <div className="fixed flex flex-col divide-y w-80">
-                    {notFollowing?.docs.length ? <h2>Follow Others</h2> : null}
+                    <h2>
+                        Follow Others
+                        {notFollowing?.docs.length ? null : <p className="text-sm font-normal text-gray-500 mt-2">You've followed all the users. Great work!</p>}
+                    </h2>
                     {
                         notFollowing?.docs.map((notFollowingDoc) => (
                             <UserPreview authUserData={props.userData} previewUserDoc={notFollowingDoc} authUser={props.user} />

@@ -10,8 +10,10 @@ export function Home(props: { user: User, userData: DocumentData }) {
 }
 
 
-Home.getLayout = (page: ReactElement) => {
-  return <Layout highlight=''>{page}</Layout>;
+Home.getLayout = (page: ReactElement, userInfo?: DocumentData) => {
+  console.log(userInfo);
+  
+  return <Layout highlight='' userInfo={userInfo}>{page}</Layout>;
 }
 
 

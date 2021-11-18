@@ -1,5 +1,5 @@
 import { User } from '@firebase/auth';
-import { DocumentReference } from '@firebase/firestore';
+import { DocumentData, DocumentReference } from '@firebase/firestore';
 import { ProfilePage } from '../components';
 import { auth, app, firestore } from "../util/clientApp";
 import { ReactElement } from 'react';
@@ -9,8 +9,8 @@ export function Profile(props: { user: User, userRef?: DocumentReference }) {
     return <ProfilePage user={props.user} userRef={props.userRef} />
 }
 
-Profile.getLayout = (page: ReactElement) => {
-    return <Layout highlight='edit-profile'>{page}</Layout>;
+Profile.getLayout = (page: ReactElement, userInfo?: DocumentData) => {
+    return <Layout highlight='edit-profile' userInfo={userInfo}>{page}</Layout>;
   }
 
 export default Profile;
