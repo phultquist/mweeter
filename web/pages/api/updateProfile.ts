@@ -39,13 +39,13 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
   
   const allowedCharacters = /^[a-zA-Z0-9_]+$/;
   if (!allowedCharacters.test(handle)) {
-    res.status(400).json({ message: 'Handle must only contain letters, numbers, and underscores' });
+    res.status(400).json({ error: 'Handle must only contain letters, numbers, and underscores' });
     return;
   } else if (handle.length > 20) {
-    res.status(400).json({ message: 'Handle must be less than 20 characters' });
+    res.status(400).json({ error: 'Handle must be less than 20 characters' });
     return;
   } else if (handle.length < 3) {
-    res.status(400).json({ message: 'Handle must be at least 3 characters' });
+    res.status(400).json({ error: 'Handle must be at least 3 characters' });
     return;
   } 
 
