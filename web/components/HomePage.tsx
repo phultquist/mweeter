@@ -1,10 +1,10 @@
 import { User } from '@firebase/auth';
-import type { NextPage } from 'next'
 import { getFirestore, collection, addDoc, query, where, DocumentData, documentId, limit, orderBy, doc, updateDoc, getDoc } from '@firebase/firestore';
 import { useCollection, useDocument } from "react-firebase9-hooks/firestore"
 import { Button, SecondaryButton, UserPreview } from '.';
 import { HumanizeDuration, HumanizeDurationLanguage } from 'humanize-duration-ts';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { auth, app, firestore } from "../util/clientApp";
 import { ReactElement, useEffect, useState } from 'react';
@@ -147,11 +147,15 @@ function HomePage(props: { user: User, userData: DocumentData }) {
 
                                 return (
                                     <div key={mweet.docId} className="bg-white my-8 flex flex-row space-x-2 max-w-screen-sm">
-                                        <div className="w-8 h-8 flex-none overflow-hidden relative rounded-full border border-gray-200">
-                                            <Image src={mweet.photoURL || '/default-pfp.jpeg'} layout='fill' alt={mweet.userHandle} />
-                                        </div>
+                                        <Link href={`/user/${mweet.userId}`}>
+                                            <div className="w-8 h-8 cursor-pointer flex-none overflow-hidden relative rounded-full border border-gray-200">
+                                                <Image src={mweet.photoURL || '/default-pfp.jpeg'} layout='fill' alt={mweet.userHandle} />
+                                            </div>
+                                        </Link>
                                         <div className="">
-                                            <p className="text-sm font-semibold">{mweet.userName}<span className="ml-2 text-gray-500 text-xs font-normal">@{mweet.userHandle} • {mweet.dateString}</span></p>
+                                            <Link href={`/user/${mweet.userId}`}>
+                                                <p className="text-sm font-semibold cursor-pointer">{mweet.userName}<span className="ml-2 text-gray-500 text-xs font-normal">@{mweet.userHandle} • {mweet.dateString}</span></p>
+                                            </Link>
                                             <p className="text-sm text-gray-600">{mweet.text}</p>
                                         </div>
                                     </div>

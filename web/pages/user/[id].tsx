@@ -29,7 +29,8 @@ export function UserPage(props: { user: User, userData: DocumentData }) {
     const userData = userDoc?.data();
 
     const userCollectionRef = collection(getFirestore(), 'users');
-    console.log(userData?.following);
+    console.log('userData');
+    console.log(userData);
 
     console.log(userData?.following ? userData.following : ['null']);
     
