@@ -32,10 +32,20 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
   }
 
   let { handle, first, last, photoURL } = req.body;
-  handle = handle.trim().toLowerCase();
+  handle = handle.toLowerCase();
   if (photoURL === null) {
     photoURL = 'https://i.ibb.co/GxSptzK/defualt-pfp.jpg';
   }
+  
+  const allowedCharacters = /^[a-zA-Z0-9_]+$/;
+  if (!allowedCharacters.test(handle)) {
+    res.status(400).json({ message: 'Handle must only contain letters, numbers, and underscores' });
+    return;
+  } else if (handle.length > 20) {
+    res.status(400).json({ message: 'Handle must be less than 20 characters' });
+    return;
+  }
+
   const authorization = req.headers.authorization?.split("Bearer ")[1];
   let auth = getAuth(app);
 
