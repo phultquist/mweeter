@@ -44,7 +44,10 @@ export default async function updateProfile(req: NextApiRequest, res: NextApiRes
   } else if (handle.length > 20) {
     res.status(400).json({ message: 'Handle must be less than 20 characters' });
     return;
-  }
+  } else if (handle.length < 3) {
+    res.status(400).json({ message: 'Handle must be at least 3 characters' });
+    return;
+  } 
 
   const authorization = req.headers.authorization?.split("Bearer ")[1];
   let auth = getAuth(app);
