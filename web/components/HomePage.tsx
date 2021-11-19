@@ -168,7 +168,7 @@ function HomePage(props: { user: User, userData: DocumentData }) {
                 <div className="fixed flex flex-col divide-y w-80">
                     <h2>
                         Follow Others
-                        {notFollowing?.docs.length ? null : <p className="text-sm font-normal text-gray-500 mt-2">You've followed all the users. Great work!</p>}
+                        {(notFollowing?.docs.length && !notFollowingLoading) ? null : <p className="text-sm font-normal text-gray-500 mt-2">You've followed all the users. Great work!</p>}
                     </h2>
                     {
                         notFollowing?.docs.map((notFollowingDoc) => (
