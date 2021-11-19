@@ -20,19 +20,21 @@ export default function UserPreview(props: { authUser: User, authUserData: Docum
             </div>
         </div>
         <div>
-            <SecondaryButton text={props.authUserData.following?.includes(props.previewUserDoc.id) ? "Unfollow" : "Follow"} onClick={() => {
-                const authUserRef = doc(getFirestore(), "users", props.authUser.uid);
+            {props.authUser.uid !== props.previewUserDoc.id &&
+                <SecondaryButton text={props.authUserData.following?.includes(props.previewUserDoc.id) ? "Unfollow" : "Follow"} onClick={() => {
+                    const authUserRef = doc(getFirestore(), "users", props.authUser.uid);
 
-                if (props.authUserData.following?.includes(props.previewUserDoc.id)) {
-                    updateDoc(authUserRef, {
-                        following: props.authUserData.following.filter((f: string) => f !== props.previewUserDoc.id),
-                    });
-                } else {
-                    updateDoc(authUserRef, {
-                        following: [...(props.authUserData.following || []), props.previewUserDoc.id],
-                    });
-                }
-            }} />
+                    if (props.authUserData.following?.includes(props.previewUserDoc.id)) {
+                        updateDoc(authUserRef, {
+                            following: props.authUserData.following.filter((f: string) => f !== props.previewUserDoc.id),
+                        });
+                    } else {
+                        updateDoc(authUserRef, {
+                            following: [...(props.authUserData.following || []), props.previewUserDoc.id],
+                        });
+                    }
+                }} />
+            }
         </div>
     </div>);
 }
